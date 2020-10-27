@@ -1,7 +1,7 @@
 {
     "name": "horde/icalendar",
     "description": "iCalendar and vCard library",
-    "type": "library",
+    "type": "horde-library",
     "homepage": "https://www.horde.org/libraries/Horde_Icalendar",
     "license": "LGPL-2.1",
     "authors": [
@@ -11,39 +11,36 @@
             "role": "lead"
         },
         {
-            "name": "Chuck Hagenbuch",
-            "email": "chuck@horde.org",
-            "role": "lead"
-        },
-        {
             "name": "Michael J Rubinsky",
             "email": "mrubinsk@horde.org",
             "role": "developer"
+        },
+        {
+            "name": "Chuck Hagenbuch",
+            "email": "chuck@horde.org",
+            "role": "lead"
         }
     ],
-    "version": "2.1.8",
-    "time": "2017-11-11",
+    "version": "2.1.9",
+    "time": "2020-10-27",
     "repositories": [
         {
-            "type": "pear",
-            "url": "https://pear.horde.org"
+            "type": "composer",
+            "url": "https://horde-satis.maintaina.com"
         }
     ],
     "require": {
+        "horde/horde-installer-plugin": "dev-master",
         "php": "^5.3 || ^7",
-        "pear-pear.horde.org/Horde_Date": "^2",
-        "pear-pear.horde.org/Horde_Exception": "^2",
-        "pear-pear.horde.org/Horde_Mail": "^2",
-        "pear-pear.horde.org/Horde_Support": "^2",
-        "pear-pear.horde.org/Horde_Translation": "^2.2",
-        "pear-pear.horde.org/Horde_Util": "^2"
+        "horde/date": "dev-master",
+        "horde/exception": "dev-master",
+        "horde/mail": "dev-master",
+        "horde/support": "dev-master",
+        "horde/translation": "dev-master",
+        "horde/util": "dev-master"
     },
     "suggest": {
-        "pear-pear.horde.org/Horde_Test": "^2.1"
-    },
-    "replace": {
-        "pear-pear.horde.org/Horde_Icalendar": "2.*",
-        "pear-horde/Horde_Icalendar": "2.*"
+        "horde/test": "^2.1"
     },
     "autoload": {
         "psr-0": {

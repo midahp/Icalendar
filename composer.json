@@ -37,8 +37,10 @@
         "horde/mail": "^3",
         "horde/support": "^3",
         "horde/translation": "^3",
-        "horde/util": "^3"
+        "horde/util": "^3",
+        "horde/test": "dev-FRAMEWORK_6_0"
     },
+    "minimum-stability": "dev",
     "suggest": {
         "horde/test": "^3"
     },

@@ -1290,20 +1290,18 @@ class Horde_Icalendar
         if (!$change_times) {
             return false;
         }
+        foreach($change_times as $changeTime){
+            if (!$changeTime['end']){
+                // no end defined; use a high value instead
+                $changeTime['end'] = 9999;
+            }
+        }
 
+        // sort by transition time only
         usort(
             $change_times,
             function($a, $b) {
-                if (!$a['end']) {
-                    if (!$b['end']) {
-                        return $a['time'] - $b['time'];
-                    }
-                    return 1;
-                }
-                if (!$b['end']) {
-                    return -1;
-                }
-                return Horde_Icalendar::_getEndDifference($a['end'], $b['end']);
+                return $a['time'] <=> $b['time'];
             }
         );
 
@@ -1314,34 +1312,34 @@ class Horde_Icalendar
         // First check for the first change time that isn't expired (from POV of
         // $time) and is after $t.
         $n = count($change_times);
-        for ($i = 0, $n = count($change_times); $i < $n -1; $i++) {
+        for ($i = 0, $n = count($change_times); $i < $n; $i++) {
             if (!$this->_checkEndDate($t, $change_times[$i])) {
                 continue;
             }
             if ($t < $change_times[$i]['time']) {
                 return $change_times[$i]['from'];
-            } else {
-                break;
+            } elseif ($i === $n-1) {
+                // last transition in this year is before the current date
+                // use 'to' value
+                $change_times[$i]['to'];
             }
         }
 
-        for ($i = 0, $n = count($change_times); $i < $n - 1; $i++) {
-            // See Bug: 14153. Some timezone definitions may be such that a
-            // transition will incorrectly match due to the way we parse the
-            // 'end' times. There *may* be a more correct way to do this by
-            // sorting the transitions/handling 'end' values differently.
-            if (($t >= $change_times[$i]['time']) &&
-                ($t < $change_times[$i + 1]['time']) &&
-                $this->_checkEndDate($t, $change_times[$i + 1])) {
-                return $change_times[$i]['to'];
+        // sort by end time. If end time is only a year, we also need to sort by transition time
+        usort(
+            $change_times,
+            function($a, $b) {
+                $endDifference = Horde_Icalendar::_getEndDifference($a['end'], $b['end']);
+                if ($endDifference === 0){
+                    return $a['time'] <=> $b['time'];
+                }
+                return $endDifference;
             }
-        }
+        );
 
-        if ($t >= $change_times[$n - 1]['time']) {
-            return $change_times[$n - 1]['to'];
-        }
-
-        return false;
+        // at this point we know that the current time is after all defined transitions
+        // that are still vaild. Now we can just take the 'to' value of the last transition
+        return $change_times[$n - 1]['to'];
     }
 
     /**

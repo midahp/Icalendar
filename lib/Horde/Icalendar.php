@@ -1321,7 +1321,7 @@ class Horde_Icalendar
             } elseif ($i === $n-1) {
                 // last transition in this year is before the current date
                 // use 'to' value
-                $change_times[$i]['to'];
+                return $change_times[$i]['to'];
             }
         }
 
